@@ -1,0 +1,47 @@
+body {
+  background: black;
+  border-style: solid;
+  font-family: 'Exo 2', sans-serif;
+}
+
+#party {
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width:99%;
+  height:173px;
+  border: white 5px;
+  color: white;
+  border-style: solid;
+}
+
+
+#prompts {
+  text-align: center;
+  height: 460px;
+  width: 66%;
+  border: white 5px;
+  border-style: solid;
+}
+
+#inventory {
+  float: right;
+  height: 460px;
+  width: 32%;
+  border: white 5px;
+  color: white;
+  border-style: solid;
+  text-align: center;
+
+}
+
+#commandLine {
+position: absolute;
+bottom: 0;
+left: 0;
+width: 500px;
+}
+
+#commands {
+  width: 92%
+}

@@ -1,22 +1,3 @@
-
-const hero = {
-    name: 'Hero',
-    title: 'The Hero',
-    hp: 120,
-    backStory: "The young hero of our story. Blessed by The Goddess with both a sharp mind and healthy body, player.name has been tasked with defeating the orcish warlord Urlak Redmaw.",
-    weapon: "Hammer of Light's Wrath",
-    attackValue: "6 - 10",
-    // specialAbility: ''
-  }
-
-  function heroAttack() {
-    let heroHit = Math.floor(Math.random() * (11 - 6) + 6)
-    redMaw.hp -= heroHit
-    console.log(`The Hero attacks with the Hammer of Light's Wrath, dealing ${heroHit} damage! The enemy has ${redMaw.hp} HP.`)
-
-}
-
-
 const gambler = {
     name: "Penelope Claremont",
     title: 'The Gambler',
@@ -28,24 +9,24 @@ const gambler = {
 }
   gamblerAttack = () => {
     let gamblerHit = Math.floor(Math.random()* (14 - 2) + 2)
-    let promptAnswer = prompt(`You rolled ${gamblerHit}, Double or Nothing? Yes/No`)
+    let promptAnswer = prompt(`${gambler.name} rolled ${gamblerHit}, Double or Nothing? Yes/No`)
     if (promptAnswer.toUpperCase() === 'YES'){
     let doubleUp = Math.floor(Math.random()* (14 - 2) + 2)
     if (doubleUp > gamblerHit) {
-      redMaw.hp -= doubleUp
-      console.log(`The luck of the draw is with you, you deal ${doubleUp} damage instead of ${gamblerHit}.`)
-      console.log(redMaw.hp)
+      currentEnemy.hp -= doubleUp
+      console.log(`The luck of the draw is with ${gambler.name}, she deals ${doubleUp} damage instead of ${gamblerHit}. The enemy has ${currentEnemy.hp}hp remaining.`)
+
     }else{
       gambler.hp -= gamblerHit
-      console.log(`Know when to hold em, know when to fold em. You deal ${gamblerHit} damage to yourself.`)
-      console.log(gambler.hp)
-    }
+      console.log(`Know when to hold em, know when to fold em. ${gambler.name} deals ${gamblerHit} damage to herself. She has ${gambler.hp}hp remaining.`)
 
-  }else if (promptAnswer.toUpperCase() === 'NO'){
-    redMaw.hp -= gamblerHit
-    console.log(redMaw.hp)
-  }else{
-    console.log("Not a valid command, please enter yes or no.")
+    }
+    }else if (promptAnswer.toUpperCase() === 'NO'){
+      currentEnemy.hp -= gamblerHit
+      console.log(`${gambler.name} deals ${gamblerHit} damage, leaving the enemy with ${currentEnemy.hp}hp remaining.`)
+    }else{
+      console.log("Not a valid command, please enter yes or no.")
+      prompt(`You rolled ${gamblerHit}, Double or Nothing? Yes/No`)
   }
   }
 
@@ -59,23 +40,39 @@ const priest = {
     specialAbility: "Aura of Mercy - Cylas carries with him a powerful artifact passed down in the church from the first archbishop of Sanctuary; The Tears of the Goddess. The Goddess’s mercy flows from it and grants any damage Cylas deals back to the party as healing."
   }
   priestAttack = () => {
-     redMaw.hp -= 5
-     console.log(redMaw.hp)
-     if (hero.hp < 120 && hero.hp + 5 < 120) {
+     currentEnemy.hp -= 5
+     console.log(`${priest.name} attacks and deals 5 damage, leaving the enemy with ${currentEnemy.hp}hp.`)
+     if (hero.hp < 120 && hero.hp + 5 < 120 && hero.hp > 0) {
        hero.hp += 5
-       console.log(hero.hp)
+       console.log(`Aura of Mercy heals ${hero.name} for 5 hp. They have ${hero.hp}hp remaining.`)
      }
-     if (gambler.hp < 120 && gambler.hp + 5 < 120) {
+     if (gambler.hp < 120 && gambler.hp + 5 < 120 && gambler.hp > 0) {
        gambler.hp += 5
-       console.log(gambler.hp)
+       console.log(`Aura of Mercy heals ${gambler.name} for 5 hp. She has ${gambler.hp}hp remaining.`)
      }
-     if (priest.hp < 120 && priest.hp + 5 < 120) {
+     if (priest.hp < 120 && priest.hp + 5 < 120 && priest.hp > 0) {
        priest.hp += 5
-       console.log(priest.hp)
+        console.log(`Aura of Mercy heals ${priest.name} for 5 hp. He has ${priest.hp}hp remaining.`)
      }
+   }
 
-  }
+  const nameAnswer = prompt('What is the name of our hero?')
 
+  const hero = {
+      name: nameAnswer,
+      title: 'The Hero',
+      hp: 120,
+      backStory: "The young hero of our story. Blessed by The Goddess with both a sharp mind and healthy body, player.name has been tasked with defeating the orcish warlord Urlak Redmaw.",
+      weapon: "Hammer of Light's Wrath",
+      attackValue: "6 - 10",
+      // specialAbility: ''
+    }
+
+    function heroAttack() {
+      let heroHit = Math.floor(Math.random() * (11 - 6) + 6)
+      currentEnemy.hp -= heroHit
+      console.log(`${hero.name} attacks with the Hammer of Light's Wrath, dealing ${heroHit} damage! The enemy has ${currentEnemy.hp}hp remaining.`)
+    }
 
 class Enemy {
   constructor(name, hp, high, low){
@@ -84,14 +81,15 @@ class Enemy {
     this.low = low
     this.high = high
   }
+
   generateAttack() {
-      let enemyHit = Math.floor(Math.random() * (this.high - this.low) + this.low)
-      console.log(`The enemy winds up a swing, hitting /target/ for ${enemyHit} damage!`)
+      if (this.hp > 0){
+        let enemyHit = Math.floor(Math.random() * (this.high - this.low) + this.low)
+        lowest_hp_player_name.hp -= enemyHit
+        console.log(`The enemy winds up a swing, hitting ${hero.name} for ${enemyHit} damage! ${hero.name} has ${hero.hp}hp remaining.`)
+      }
   }
-  damageCalc(heroDamage) {
-    this.hp -= heroDamage
-    console.log(this.hp)
-  }
+
   isDead() {
     if (this.hp <= 0) {
       console.log('true')
@@ -100,51 +98,36 @@ class Enemy {
         console.log('false')
         return false
       }
-
   }
-
 }
 
-function get_lowest_player_hp(hero, gambler, priest) {
-	const player_array = [hero, gambler, priest]
-	if (player_array[0].hp <= player_array[1].hp && player_array[0].hp <= player_array[2].hp) {
-		return player_array[0].name
-	}
-	if (player_array[1].hp <= player_array[0].hp && player_array[1].hp <= player_array[2].hp) {
-		return player_array[1].name
-	}
-	if (player_array[2].hp <= player_array[1].hp && player_array[2].hp <= player_array[0].hp) {
-		return player_array[2].name
-	}
-}
+const orc = new Enemy('Orc', 1, 14, 10)
+const orcBerserker = new Enemy('Orc Berserker', 1, 17, 15)
+const ogre = new Enemy('Ogre', 1, 18, 16)
+const redMaw = new Enemy('Urlak Redmaw', 1, 21, 10)
+let lineup = [orcBerserker, orc, ogre, redMaw]
+let index = 0
+let currentEnemy = lineup[index]
 
-const orc = new Enemy('Orc', 200, 14, 10)
-const orcBerserker = new Enemy('Orc Berserker', 180, 17, 13)
-const ogre = new Enemy('Ogre', 215, 18, 15)
-const redMaw = new Enemy('Urlak Redmaw', 285, 21, 10)
-const lineup = [orc, orcBerserker, ogre, redMaw]
-let currentEnemy = lineup[0]
-
-let enemiesDead = false
-
-const enemyLogic = () => {    //infinite loop, do not run.
-  while(enemiesDead == false){
-    console.log('hello')
-    currentEnemy.hp -= heroAttack
-      if (currentEnemy.hp <= 0) {
-        currentEnemy = lineup++
-      }else if (lineup[3].hp <= 0){
-        enemiesDead = true
-      }
+const rotateEnemies = () => {
+  if (currentEnemy.isDead() && currentEnemy != redMaw) {
+    index += 1
+    currentEnemy = lineup[index]
+    lootRound()
+    longRest()
+      console.log(currentEnemy)
+  }else if (redMaw.isDead()) {
+      console.log('Urlak Redmaw is defeated! The orcish hordes, now leaderless, will be easy prey for the knights of Sanctuary. Ushering in an uneasy, but long lasting peace. The party scatters to the winds, their deeds becoming legend.')
     }
   }
-  // if enemy is dead, switch enemy.
-  // enemy attack if not
-  // if (lineup[0].isDead()) {
-  // index+=1
-// }else{
-//   Enemy.isDead()
-  // }
+
+let maxHp = 120
+const longRest = () => {
+  hero.hp = maxHp
+  priest.hp = maxHp
+  gambler.hp = maxHp
+  console.log('The party takes a long rest between battles, restoring their hp.')
+}
 // make sure you have a div with a specific ID
 //select that id with jquery and assign it to a variable
 //create a ul element
@@ -157,16 +140,60 @@ let inventory = [
   'minor potion',
 ]
 
-let $inventory = $('#inventory')
-$inventory.html('<ul></ul>')
-for (let i = 0; i < $inventory.length; i++) {
- 
+const printInventory = () => {
+  console.log(inventory)
 }
 
-// const prompts = document.getElementByID('promptsContainer')
-// function browserAlert(message) {
-//   prompts.push(message)
-// }
+
+
+const lootRound = () => {
+  if (inventory.length <= 3) {
+    let potionDrop = Math.floor(Math.random() * (1001 - 1) + 1)
+      if (potionDrop < 700) {
+        console.log("You find 2 minor potions and put them into your backpack.")
+        inventory.push('minor potion', 'minor potion')
+        console.log(inventory)
+      }else if (potionDrop > 700 && potionDrop < 900) {
+        console.log("You find 2 potions and put them into your backpack.")
+        inventory.push('potion', 'potion')
+        console.log(inventory)
+      }else{
+        console.log("You strike gold and find 2 mega potions, putting them carefully into your backpack.")
+        inventory.push('mega potion', 'mega potion')
+        console.log(inventory)
+    }
+  }else if(inventory.length === 4){
+    let potionDrop = Math.floor(Math.random() * (1001 - 1) + 1)
+      if (potionDrop < 700) {
+        console.log("You find 2 minor potions, but only have space in your bag for one.")
+        inventory.push('minor potion', 'minor potion')
+        console.log(inventory)
+      }else if (potionDrop > 700 && potionDrop < 900) {
+        console.log("You find 2 potions, but only have space in your bag for one.")
+        inventory.push('potion', 'potion')
+        console.log(inventory)
+      }else{
+        console.log("You strike gold and find 2 mega potions, but only have space in your bag for one.")
+        inventory.push('mega potion', 'mega potion')
+        console.log(inventory)
+    }
+
+  }else{
+    console.log('Your inventory is too full to hold any more potions.')
+  }
+}
+
+
+const lowestHpPlayer = () => {
+  if (gambler.hp < priest.hp && gambler.hp < hero.hp){
+    return gambler
+  }else if (priest.hp < hero.hp && priest.hp < gambler.hp){
+    return priest
+  }else{
+    return hero
+  }
+}
+
 
 const commands = document.getElementById('commands')
 const submit = document.getElementById('submit')
@@ -177,24 +204,45 @@ const submit = document.getElementById('submit')
       document.getElementById('submit').click()
     }
 })
-
+let lowest_hp_player_name = lowestHpPlayer()
   submit.addEventListener('click', function(event){
     if (commands.value.toUpperCase() === 'ATTACK'){
       const heroDamage = heroAttack()
       const priestDamage = priestAttack()
       const gamblerDamage = gamblerAttack()
-      const enemyAttack = redMaw.generateAttack()
-      const lowest_hp_player_name = get_lowest_player_hp(hero.name, gambler.name, priest.name)
-      const players = {
-        priest, hero, gambler
-      }
-      players[lowest_hp_player_name]-=enemyAttack
-      orc.damageCalc()
-      enemyLogic()//calling a function that would be rotating through enemies.
-      console.log(players[lowest_hp_player_name])
+      const enemyAttack = currentEnemy.generateAttack()
+      currentEnemy.isDead()
+      rotateEnemies()
     }else if (commands.value.toUpperCase() === 'ITEM') {
-    let potionPrompt = prompt(`You have ${inventory[0]}, ${inventory[1]}, ${inventory[2]}. Which one would you like to use?`)
+      let potionPrompt = prompt(`You currently have ${inventory.join(', ')}. Which one would you like to use?`)
+        if (potionPrompt.toUpperCase() === 'MINOR POTION'){
+          if (lowest_hp_player_name.hp < 120 && lowest_hp_player_name.hp + 10 < 120){
+            lowest_hp_player_name.hp += 10
+            console.log(`You use the minor potion and heal for 10 hp. You now have ${lowest_hp_player_name.hp}.`)
+            inventory.pop('minor potion')
+            printInventory()
+          //inventoryUpdate()
+    }else{
+          console.log('')
+        }
+    }else if (potionPrompt.toUpperCase() === 'POTION'){
+        if (lowest_hp_player_name.hp < 120 && lowest_hp_player_name.hp + 15 < 120){
+          lowest_hp_player_name.hp += 15
+          console.log(`You use the minor potion and heal for 15 hp. You now have ${lowest_hp_player_name.hp}.`)
+          inventory.pop('potion')
+          printInventory()
+        //inventoryUpdate()
+        }
+    }else if (potionPrompt.toUpperCase() === 'MEGA POTION') {
+        if (lowest_hp_player_name.hp < 120 && lowest_hp_player_name.hp + 20 < 120) {
+          lowest_hp_player_name.hp += 20
+          console.log(`You use the minor potion and heal for 20 hp. You now have ${lowest_hp_player_name.hp}.`)
+          inventory.pop('mega potion')
+          printInventory()
+        //inventoryUpdate()
+        }
     }else{
       console.log('Not a valid command, please try again.')
     }
+  }
 })

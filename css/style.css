@@ -13,7 +13,18 @@ body {
   border: white 5px;
   color: white;
   border-style: solid;
+  display: block;
 }
+
+#party p {
+  float: left;
+  display: inline-flex;
+  justify-content: space-around;
+  font-size: 20px;
+  margin: 65px
+
+}
+
 
 
 #prompts {
@@ -32,8 +43,9 @@ body {
   color: white;
   border-style: solid;
   text-align: center;
-
+  font-size: 32px;
 }
+
 
 #commandLine {
 position: absolute;

@@ -288,4 +288,5 @@ submit.addEventListener('click', function(event) {
             console.log('Not a valid command, please try again.')
         }
     }
+    $('#commands').val('')
 })
